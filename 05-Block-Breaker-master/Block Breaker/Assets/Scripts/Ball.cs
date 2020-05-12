@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class Ball : MonoBehaviour {
+    public int count;
+    public Text Score;
 
     // config params
     [SerializeField] Paddle paddle1;
@@ -23,6 +26,8 @@ public class Ball : MonoBehaviour {
         paddleToBallVector = transform.position - paddle1.transform.position;
         myAudioSource = GetComponent<AudioSource>();
         myRigidBody2D = GetComponent<Rigidbody2D>();
+        count = 0;
+        setCountText();
 	}
 	
 	// Update is called once per frame
@@ -53,13 +58,27 @@ public class Ball : MonoBehaviour {
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Vector2 velocityTweak = new Vector2
-            (randomFactor, randomFactor); 
+            (randomFactor, randomFactor);
+        /*if (collision.gameObject.CompareTag("Breakable"))
+        {
+            count = count + 10;
+            setCountText();
+
+        }*/
 
         if (hasStarted)
         {
             AudioClip clip = ballSounds[UnityEngine.Random.Range(0, ballSounds.Length)];
             myAudioSource.PlayOneShot(clip);
             myRigidBody2D.velocity += velocityTweak;
+
+
         }
+    }
+
+
+    void setCountText()
+    {
+        Score.text = "Score: " + count.ToString();
     }
 }
